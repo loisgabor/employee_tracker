@@ -13,6 +13,7 @@ const introQuestion = {
     "Remove employee",
     "Update employee role",
     "Update employee manager",
+    "Exit",
   ],
 };
 const addEmployee = [
@@ -27,9 +28,18 @@ const addEmployee = [
     message: "What is employee's last name?",
   },
   {
-    type: "input",
+    type: "list",
     name: "employeeRole",
     message: "What is employee's role",
+    choices: [
+      "Sales Lead",
+      "Salesperson",
+      "Lead Engineer",
+      "Software Engineer",
+      "Account Manager",
+      "Accountant",
+      "Legal Team Lead",
+    ],
   },
 ];
 
@@ -72,25 +82,70 @@ connection.connect(function (err) {
 
 function start() {
   inquirer.prompt(introQuestion).then((data) => {
-    switch (data) {
+    switch (data.firstQuestion) {
       case "View all employees":
-        //   console.table(employee_db);
+        connection.query("SELECT * FROM employee", (err, res) => {
+          if (err) throw err;
+          console.table(res);
+          start();
+        });
         break;
       case "View all employees by department":
         break;
       case "View all employees by manager":
         break;
       case "Add employee":
-        return inquirer.prompt(addEmployee);
-        // .then(function (data) {
-        //   connection.query("INSERT INTO employee SET ?", {
-        //     first_name: data.first_name,
-        //     last_name: data.last_name,
-        //     role_id: data,
-        //   });
+        console.log("this worked");
+
+        inquirer
+          .prompt(addEmployee)
+          // .then(inquirer.prompt(introQuestion));
+
+          .then(function (data) {
+            connection.query("INSERT INTO employee SET ?", {
+              first_name: data.employeeFirstName,
+              last_name: data.employeeLastName,
+            });
+            console.table(data);
+            start();
+          });
         // });
         break;
       case "Remove employee":
+        // var removal = (data) =>{
+        // connection.query("SELECT * FROM employee", (err, res) => {
+        // inquirer.prompt({
+        //   type: "list",
+        //   name: "employeeRemoval",
+        //   message: "Which employee would you like to remove?",
+        //   choices: function (res) {
+        //     var employeeArray = [];
+        //     for (var i = 0; i < data.length; i++) {
+        //       employeeArray.push(data[i].first_name, last_name);
+        //     }
+        //     return employeeArray;
+        //   },
+        // });
+
+        connection.query("DELETE FROM employee", (err, res) => {
+          if (err) throw err;
+
+          inquirer.prompt({
+            type: "list",
+            name: "employeeRemoval",
+            message: "Which employee would you like to remove?",
+            choices: function (value) {
+              var employeeArray = [];
+              for (var i = 0; i < res.length; i++) {
+                employeeArray.push(res[i].first_name, last_name);
+              }
+              return employeeArray;
+            },
+          });
+        });
+
+        // start();
+
         break;
       case "Update employee role":
         break;
