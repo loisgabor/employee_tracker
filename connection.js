@@ -51,9 +51,11 @@ function start() {
       case "View all employees":
         viewEmployees();
         break;
-      case "View all employees by department":
+      case "View all departments":
+        viewDepartment();
         break;
-      case "View all employees by manager":
+      case "View all roles":
+        viewRole();
         break;
       case "Add employee":
         addEmployee();
@@ -79,6 +81,20 @@ const viewEmployees = () => {
   });
 };
 
+const viewDepartment = () => {
+  connection.query("SELECT * FROM Department", (err, res) => {
+    if (err) throw err;
+    console.table("______________________________", res);
+    start();
+  });
+};
+const viewRole = () => {
+  connection.query("SELECT * FROM Role", (err, res) => {
+    if (err) throw err;
+    console.table("______________________________", res);
+    start();
+  });
+};
 const addEmployee = () => {
   connection.query("SELECT * FROM employee", (err, res) => {
     if (err) throw err;
@@ -198,21 +214,6 @@ const addRoles = () => {
     }
   });
 };
-// const removeEmployee = () => {
-//     inquirer.prompt({
-//     type: "list",
-//     name: "employeeRemoval",
-//     message: "Which employee would you like to remove?",
-//     choices: employeeArray
-//   }).then(function (data) {
-//       connection.query("DELETE FROM employee WHERE id=?", (err, res) => {
-//         if (err) throw err;
-//         console.table(employeeArray);
-//           .then(delete employeeArray[res]);
-//         // .then(start());
-//       });
-//     });
-// };
 
 const introQuestion = {
   type: "list",
@@ -220,8 +221,8 @@ const introQuestion = {
   message: "What would you like to do?",
   choices: [
     "View all employees",
-    "View all employees by department",
-    "View all employees by manager",
+    "View all departments",
+    "View all roles",
     "Add employee",
     "Add department",
     "Add role",

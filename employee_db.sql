@@ -15,7 +15,7 @@ CREATE TABLE employee (
 CREATE TABLE role (
   id INTEGER NOT NULL AUTO_INCREMENT,
   title VARCHAR(30),
-  salary DECIMAL,
+  salary INT,
   department_id INTEGER,
   PRIMARY KEY (id)
 );
@@ -29,8 +29,10 @@ CREATE TABLE department (
 INSERT INTO employee(first_name, last_name, role_id, manager_id)
 VALUES ("Laura", "Bash", 345, 25),("Jennifer", "Lawrence", 13,255), ("Gerard", "Butler", 6324, 3452);
 
-INSERT INTO role(title, salary, department_id)
-VALUES ("Sales", 5.6, 452),("Sales", 6.5, 234),("Manager", 8.7, 868);
+-- INSERT INTO role(title, salary, department_id)
+-- VALUES ("Sales", 5.6, 452),("Sales", 6.5, 234),("Manager", 8.7, 868);
+
+-- SELECT * FROM employee;
+-- SELECT * FROM role;
 
 SELECT * FROM employee;
-SELECT * FROM role;
