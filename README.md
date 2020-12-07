@@ -18,6 +18,7 @@ Run 'node connection.js' to initialize application
 ## Usage
 
 Initialize application and follow the prompts.
+https://drive.google.com/file/d/1pePj6j-lNmqr8l9_F13rzc7fF16Y84cf/view
 
 ## License
 
