@@ -16,35 +16,8 @@ connection.connect(function (err) {
   if (err) throw err;
   console.log("connected as id " + connection.threadId);
   start();
-  //   afterConnection();
 });
-const getManager = () => {
-  connection.query(
-    "SELECT * FROM employee WHERE manager_id is null",
-    (err, res) => {
-      if (err) throw err;
-      // console.log("THIS IS THE RESPONSE");
-      // console.log(res);
-      const managerArray = res.map((manager) => {
-        return {
-          name: `${manager.first_name} ${manager.last_name}`,
-          value: manager.id,
-        };
-      });
-      console.log(managerArray);
-      return managerArray;
-    }
-  );
-};
-
-// function afterConnection() {
-//   connection.query("SELECT * FROM products", function (err, res) {
-//     if (err) throw err;
-//     console.log(res);
-//     connection.end();
-//   });
-// }
-
+// ------------------START - SWITCH CASE ------------//
 function start() {
   inquirer.prompt(introQuestion).then((data) => {
     switch (data.firstQuestion) {
@@ -69,10 +42,13 @@ function start() {
       case "Add role":
         addRoles();
         break;
+      case "Exit":
+        exit();
+        break;
     }
   });
 }
-
+//----------------METHODS-----------------------//
 const viewEmployees = () => {
   connection.query("SELECT * FROM employee", (err, res) => {
     if (err) throw err;
@@ -120,18 +96,6 @@ const addEmployee = () => {
       });
     }
   });
-  // console.log(managerArray);
-  // inquirer.prompt(addEmployeeQuestions).then(function (data) {
-  //   connection.query("INSERT INTO employee SET ?", {
-  //     first_name: data.employeeFirstName,
-  //     last_name: data.employeeLastName,
-  //     role_id: role_id,
-  //     manager_id: data.employeeManager,
-  //   });
-  //   employeeArray.push(data);
-  //   console.table(employeeArray);
-  //   start();
-  // });
 };
 const updateEmployee = () => {
   connection.query("SELECT * FROM employee", (err, res) => {
@@ -214,7 +178,11 @@ const addRoles = () => {
     }
   });
 };
+const exit = () => {
+  connection.end();
+};
 
+//------------------QUESTIONS----------------/
 const introQuestion = {
   type: "list",
   name: "firstQuestion",
